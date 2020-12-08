@@ -9,7 +9,7 @@ Use the following syntax to directly access macros defined in `SASutils` repo :
 
 /* Execute macros stored at this URL */
 filename mcrs_url  URL "&url_path/macros/_load_URL_macros.sas";
-%include mcrs_url;   /* Loading macros directly from `SASutils` repo */
+%include mcrs_url;  
 
 ```
 
