@@ -3,6 +3,7 @@
 
 # sas data sets
 *.sas7bdat
+*.sas7bxat
 
 # sas views
 *.sas7bvew

@@ -41,3 +41,8 @@ data classx_long (label = "Data with multiple rows/events per subject");
   end;
   drop age;
 run;
+
+/* Move  all datasets */
+proc datasets nolist;
+   copy in=work out=testdata memtype=data move;
+run;quit;
