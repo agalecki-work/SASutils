@@ -1,6 +1,6 @@
-
+%let project_path = .;
 /* Datasets `classx` and `classx_long` are created for testing */
-libname testdata "./testdata";
+libname testdata "&project_path/testdata";
 
 data classx (label = "Created from `sashelp.class`");
  format ssid;

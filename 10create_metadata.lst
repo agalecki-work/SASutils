@@ -1,0 +1,37 @@
+                                        List of datasets                                       1
+                                                              13:40 Wednesday, December 16, 2020
+
+                                             m
+       l          m                          e                       t
+       i          e                          m                       y          c
+       b          m                          l                       p          r
+       n          n                          a                       e          d          n n
+  O    a          a                          b                       m          a          o v
+  b    m          m                          e                       e          t          b a
+  s    e          e                          l                       m          e          s r
+
+  1 TESTDATA CLASSX      Created from `sashelp.class`               DATA 16DEC20:13:36:25 19 7
+  2 TESTDATA CLASSX_LONG Data with multiple rows/events per subject DATA 16DEC20:13:36:25 38 4
+                                       List of variables                                       2
+                                                              13:40 Wednesday, December 16, 2020
+
+                                                                                           i
+           l           m        m                                                          n
+           i           e        e                       l      v                        f  f
+           b           m        m                       e      a           l            o  o
+           n           n        t        n        t     n   n  r           a            r  r
+     O     a           a        y        a        y     g   p  n           b            m  m
+     b     m           m        p        m        p     t   o  u           e            a  a
+     s     e           e        e        e        e     h   s  m           l            t  t
+
+     1  TESTDATA  CLASSX       DATA  SSID        num    8   0  1  Subject id                
+     2  TESTDATA  CLASSX       DATA  NAME        char   8  40  2                            
+     3  TESTDATA  CLASSX       DATA  SEX         char   1  48  3                            
+     4  TESTDATA  CLASSX       DATA  AGE         num    8   8  4                            
+     5  TESTDATA  CLASSX       DATA  HEIGHT      num    8  16  5                            
+     6  TESTDATA  CLASSX       DATA  WEIGHT      num    8  24  6                            
+     7  TESTDATA  CLASSX       DATA  WEIGHT_KG   num    8  32  7                            
+     8  TESTDATA  CLASSX_LONG  DATA  SSID        num    8   0  1  Subject id                
+     9  TESTDATA  CLASSX_LONG  DATA  EVENT_NO    num    3  16  2                            
+    10  TESTDATA  CLASSX_LONG  DATA  EVENT_NAME  char  20  19  3                            
+    11  TESTDATA  CLASSX_LONG  DATA  AGE_LONG    num    8   8  4  Age at a given event      
