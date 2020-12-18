@@ -1,5 +1,12 @@
-# SASutils
+# `SASutils`
+
 SAS macros /functions for internal use
+
+# Run 
+
+* `01create_testdata.sas` 
+* `10create_metadata.sas`
+* `15data_summary
 
 
 ## Releases history
