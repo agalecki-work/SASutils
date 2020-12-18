@@ -103,7 +103,7 @@ quit;
 );
 ods listing close;
 
-ods html;
+ods html file = "&project_path/15data_summary.html";
 Title "Data `means_summary` ";
 proc print data= means_summary;
 run;
