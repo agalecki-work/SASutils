@@ -101,9 +101,6 @@ quit;
         vars = memname,                  /*  List of selected variable names in meta data */
         use_mac = means_dt               /* Name of a user defined macro (see above)*/
 );
-ods listing close;
-
-ods html file = "&project_path/15data_summary.html";
 Title "Data `means_summary` ";
 proc print data= means_summary;
 run;

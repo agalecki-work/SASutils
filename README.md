@@ -7,7 +7,7 @@ SAS macros /functions for internal use
 * `01create_testdata.sas` 
 * `10create_metadata.sas`
 * `15data_summary.sas`
-   - Check output in `15data_summary.html` file
+
 
 ## Releases history
 
