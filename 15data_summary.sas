@@ -28,58 +28,81 @@ run;
 
 /*--- Ex.1: Descriptive statistics for datasets in `testdata` library ---*/
 
-/* STEP 1: Initiate template dataset for appending */
+/* STEP 1: Initiate dataset for appending */
 /* https://blogs.sas.com/content/sgf/2019/01/09/simplify-data-preparation-using-sas-data-templates/ */
 
-data meansout_tmplt;
+data means_summary;
    label
-      newvar1 = 'Label for new variable 1'
-      newvar2 = 'Label for new variable 2'
-      /* ... */
-      newvarN = 'Label for new variable N'
-      ;
+     memname  = "Dataset name"
+     Variable = "Variable name"
+     Label    = "Variable label"
+     N        = "N" 
+     NMiss    = "N Miss"   
+     Mean     = "Mean"
+     StdDev   = "Std Dev"  
+     Min      = "Minimum"  
+     P25      = "25th Pctl"
+     P50      = "50th Pctl"
+     P75      = "75th Pctl"
+     Max      = "Maximum";
   length
-      newvar1 newvar2 $40
-      newvarN 8
+      memname  $32
+      Variable $32
+      Label    $255
       ;
-   format newvarN mmddyy10.;
-   informat newvarN date9.;
+  format                   
+     N  
+     NMiss BEST2.;
+  format
+     Mean    
+     StdDev  
+     Min     
+     P25     
+     P50     
+     P75     
+     Max D12.3 
+   ; 
+   * informat varname date9.;
    call missing(of _all_);
    stop;
-run;
+run;  /* `means_summary` dataset created */
 
-ods trace on;
-proc means data= testdata.classx 
+%macro means_dt;
+/* Auxiliary user defined macro without parameters invoked by `driver` macro */
+
+proc means data= testdata.&memname stackods 
                n nmiss mean stddev min p25 p50 p75 max;
 var _numeric_;
-output out =out;
+ods output summary = out;
 run;
 quit;
 
-*proc transpose data= outv(drop =  )
-                out;
-proc contents data= out position;
+data out1;
+  label memname = "Dataset name";
+  set out;
+  length memname $32;
+  memname = "&memname";
 run;
 
+proc append base = means_summary
+            data = out1;
+run;
+quit;
+%mend means_dt;
 
-proc print data= out;
+%driver(drive_dt = metadata.lib_vtable,  /* Meta data */
+        vars = memname,                  /*  List of selected variable names in meta data */
+        use_mac = means_dt               /* Name of a user defined macro */
+);
+
+ods html;
+Title "Data `means_summary`";
+proc print data= means_summary;
 run;
 endsas;
 
   
 
-
-
-%lib_vtable(libname = testdata);
-%lib_vcolumn(libname = testdata);
-
-Title "List of datasets";
-proc print data = lib_vtable;
-run;
-
-Title "List of variables";
-proc print data = lib_vcolumn;
-run;
 
 /* Move  datasets */
 proc datasets nolist;

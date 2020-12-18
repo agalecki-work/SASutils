@@ -6,6 +6,7 @@
 /*  Purpose:  Driver macro                                             */
 /*                                                                     */
 /*  Nov. 2016 Renamed nvars macro variable to nvars_drvr                */
+/*  Dec. 2020 local statement added                                    */
 /***********************************************************************/
 
 
@@ -24,7 +25,7 @@
 */
 
 /* Count number of vars */
-
+%local nvars_drvr;
 %let nvars_drvr=0;
 %do %while(%scan(&vars,&nvars_drvr+1) ne );
 %let nvars_drvr=%eval(&nvars_drvr+1);
@@ -35,6 +36,7 @@ data drive_dt;
   set &drive_dt;
 run;
 
+%local nlabels;
 %let nlabels=0;
 data _null_;
   set drive_dt nobs=driver_nobs;
@@ -47,7 +49,7 @@ run;
 
 /* Loop through all analyses points (all labels) */
 
-
+%local anal_nr;
 %do anal_nr=1 %to &nlabels;
  %put ####   Analysis nr &anal_nr..   ##### ;
 
