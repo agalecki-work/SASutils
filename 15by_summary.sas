@@ -18,38 +18,21 @@ filename fm "&project_path/macros/_load_macros.sas";
 
 /* Modify and print metadata */
 
-data vtable;
+data by_vtable;
  set  metadata.lib_vtable;
  length upnm $32;
- length by_var  $50;
+ length byvar  $50;
  upnm = upcase(memname);
  
- * Create `by_var`;
+ * Create `byvar`;
  select(upnm);
-   when ("CLASSX")        by_var = "sex";
-   when ("CLASSX_LONG")   by_var = "event_name sex ";
+   when ("CLASSX")        byvar = "sex";
+   when ("CLASSX_LONG")   byvar = "event_name";
    otherwise;
  end;
  drop upnm;
  run;
  
- data by_vtable (drop = by_var);
-    set vtable;
-    length byvar $32;
-    length byvar_stmt  $40;
-    
-    /* 1st output; */
-      byvar = "";
-      byvar_stmt="";
-      output;
-    
-    /* 2nd output; */
-      byvar = by_var;
-      byvar_stmt="BY "|| strip(by_var); /* BY statement stored */;
-      output;
-
-run;
-
 
 Title "`by_vtable` in `testdata` library";
 proc print data = by_vtable;
@@ -108,9 +91,10 @@ run;  /* `means_summary` dataset created */
 /* This macro is executed once for every row of data specified in `drive_dt` argument */ 
 /* Macro variables are populated with a value of a corresponding variable in `drive_dt`  */
 
+
 proc sort data = testdata.&memname
           out  = sorted_rawdt;
-&byvar_stmt; /* By statement */
+BY &byvar; /* By statement */
 run;
 
 
@@ -118,7 +102,7 @@ Title "PROC MEANS results for `&memname` data";
 proc means data= sorted_rawdt stackods 
                n nmiss mean stddev min p25 p50 p75 max;
 var _numeric_;
-&byvar_stmt;  
+BY &byvar;  
 ods output summary = out_bymeans;
 run;
 quit;
