@@ -21,13 +21,13 @@ filename fm "&project_path/macros/_load_macros.sas";
 data by_vtable;
  set  metadata.lib_vtable;
  length upnm $32;
- length byvar  $50;
+ length byvars  $50;
  upnm = upcase(memname);
  
  * Create `byvar`;
  select(upnm);
-   when ("CLASSX")        byvar = "sex";
-   when ("CLASSX_LONG")   byvar = "event_name";
+   when ("CLASSX")        byvars = "sex";
+   when ("CLASSX_LONG")   byvars = "event_name";
    otherwise;
  end;
  drop upnm;
@@ -51,9 +51,14 @@ run;
 data bymeans_summary;
    label
      memname  = "Dataset name"
+     
+     /*--- BY variables */
+     sex        = "Sex in `CLASSX` data"
+     event_name = "Event name in `CLASSX_LONG` data"
+ 
      Variable = "Variable name"
      name     = "Variable name (for merging)"
-     Label    = "Variable label"
+     Label    = "Variable label"    
      N        = "N" 
      NMiss    = "N Miss"   
      Mean     = "Mean"
@@ -65,10 +70,15 @@ data bymeans_summary;
      Max      = "Maximum";
   length
       memname  $32
+      
+      sex      $1
+      event_name $15
+     
       Variable $32
       name     $32
       Label    $255
-      ;
+   
+     ;
   format                   
      N  
      NMiss BEST2.;
@@ -94,7 +104,7 @@ run;  /* `means_summary` dataset created */
 
 proc sort data = testdata.&memname
           out  = sorted_rawdt;
-BY &byvar; /* By statement */
+BY &byvars; /* By statement */
 run;
 
 
@@ -102,7 +112,7 @@ Title "PROC MEANS results for `&memname` data";
 proc means data= sorted_rawdt stackods 
                n nmiss mean stddev min p25 p50 p75 max;
 var _numeric_;
-BY &byvar;  
+BY &byvars;  
 ods output summary = out_bymeans;
 run;
 quit;
@@ -115,55 +125,34 @@ data out_bymeans1;
   name    = upcase(variable); /* for merging */
 run;
 
-Title "Data: `&memname`. By &byvar";
-proc print data =out_bymeans1;
+Title "Data: `&memname`. By &byvars";
+proc print data = out_bymeans1;
 run;
 
-*proc append base = bymeans_summary
-            data = out1 force;
+proc append base = bymeans_summary
+            data = out_bymeans1 force;
 run;
 quit;
+
+/* Clean-up */
+proc datasets library=work;
+   delete sorted_rawdt out_bymeans out_bymeans1;
+run;
+
 %mend bymeans_dt;
 
 /* For every row of `drive_dt` dataset user defined macro `use_mac` is executed */
 %driver(drive_dt = by_vtable,     /* Meta data */
-        vars = memname byvar_stmt byvar,           /*  List of selected variable names in meta data */
+        vars = memname byvars,           /*  List of selected variable names in meta data */
         use_mac = bymeans_dt               /* Name of a user defined macro (see above)*/
 );
-endsas;
 
-Title "Data `means_summary` ";
-proc print data= means_summary;
+Title "Data `bymeans_summary` ";
+proc print data= bymeans_summary;
 run;
-
-/* Merge data */
-
-proc sort data = metadata.lib_vcolumn
-          out  = lib_vcolumn;
-by memname name;         
-run;
-
-proc sort data = means_summary;
-by memname name;        
-run;
-
-data var_info;
-  merge lib_vcolumn
-        means_summary;
-  by memname name;
-run;
-
-proc sort data=var_info;
- by memname varnum;
-run;
-
-Title "Data `var_info` ";
-proc print data= var_info;
-run;
-
 
 /* Move  datasets */
 proc datasets nolist;
-   copy in=work out=outdata memtype=data move;
-   select means_summary var_info;
+   copy in = work out = outdata memtype=data move;
+   select bymeans_summary;
 run;quit;
