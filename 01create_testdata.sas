@@ -1,4 +1,5 @@
 %let project_path = .;
+
 /* Datasets `classx` and `classx_long` are created for testing */
 libname testdata "&project_path/testdata";
 

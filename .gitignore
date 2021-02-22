@@ -2,6 +2,9 @@
 .html
 .htm
 
+#.code
+*.code
+
 # lst
 *.lst
 
