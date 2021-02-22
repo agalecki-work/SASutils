@@ -1,3 +1,5 @@
+/* https://github.com/scheike/update-code-for-jss-comp.risk/blob/master/follic.txt */
+
 data folic0;
 length path1 $4;
 length resp $2;
